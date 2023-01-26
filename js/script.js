@@ -14,17 +14,17 @@ function titleClickHandler(event){
   console.log('Link was clicked!');
 
   
-  /*[DONE] remove class 'active' from all article links  */
+  /* remove class 'active' from all article links  */
   const activeLinks = document.querySelectorAll('.titles a.active');
 
   for(let activeLink of activeLinks){
     activeLink.classList.remove('active');
   }
 
-  /*[DONE] add class 'active' to the clicked link */
+  /* add class 'active' to the clicked link */
   console.log('clickedElement:', clickedElement);
     
-  /*[DONE] remove class 'active' from all articles */
+  /* remove class 'active' from all articles */
   const activeArticles = document.querySelectorAll('.posts article.active');
     
   for(let activeArticle of activeArticles){
@@ -33,14 +33,14 @@ function titleClickHandler(event){
         
   clickedElement.classList.add('active');
 
-  /*[DONE] get 'href' attribute from the clicked link */
+  /* get 'href' attribute from the clicked link */
   const articleSelector = clickedElement.getAttribute('href');
   console.log(articleSelector);
 
-  /* [DONE] find the correct article using the selector (value of 'href' attribute) */
+  /* find the correct article using the selector (value of 'href' attribute) */
   const targetArticle = document.querySelector(articleSelector);
 
-  /*[DONE] add class 'active' to the correct article */
+  /* add class 'active' to the correct article */
   targetArticle.classList.add('active');
 
 }
@@ -79,10 +79,6 @@ function generateTitleLinks(customSelector = ''){
     const linkHTMLData = {id: articleId, title: articleTitle};
     const linkHTML = templates.articleLink(linkHTMLData);
 
-    /* insert link into titleList */
-    // titleList.insertAdjacentHTML('beforeend', linkHTML);
-    // titleList.innerHTML = titleList.innerHTML + linkHTML;
-        
     /* insert link into html variable */
     html = html + linkHTML;
   }
@@ -123,7 +119,7 @@ function calculateCloudClass(count, params) {
 }
 
 function generateTags(){
-  /* [NEW] create a new variable allTags with an empty object */
+  /* create a new variable allTags with an empty object */
   let allTags = {};   
 
   /* find all articles */
@@ -157,10 +153,10 @@ function generateTags(){
       /* add generated code to html variable */
       html = html + tagHTML;
 			
-      /* [NEW] check if this link is NOT already in allTags */
+      /* check if this link is NOT already in allTags */
       if(!allTags[tag]) {
 
-        /* [NEW] add generated code to allTags array */
+        /* add generated code to allTags array */
         allTags[tag] = 1;
       } else {
         allTags[tag]++;
@@ -173,30 +169,30 @@ function generateTags(){
   
     /* END LOOP: for every article: */
 
-    /* [NEW] find list of tags in right column */
+    /* find list of tags in right column */
     const rightTagList = document.querySelector(optTagsListSelector);
 
     const cloudParams = calculateCloudParams(allTags);
     console.log('TAGS PARAMS:', cloudParams);
 
-    /* [NEW] create variable from all links to HTML code */
+    /* create variable from all links to HTML code */
     const allTagsData = {tags: []};
 
-    /* [NEW] START LOOP: for each tag in allTags : */
+    /* START LOOP: for each tag in allTags : */
     for(let tag in allTags){
 		
       const cloudClassName = calculateCloudClass(allTags[tag] , cloudParams);
 
-      /* [NEW] generate code of a link and add it to allTagsHTML */
+      /* generate code of a link and add it to allTagsHTML */
       allTagsData.tags.push({
         tag: tag,
         count: allTags[tag],
         className: cloudClassName
       });
 
-      /* [NEW] START LOOP: for each tag in allTags : */
+      /* START LOOP: for each tag in allTags : */
     }
-    /* [NEW] add html from allTagsHTML to rightTagList */
+    /* add html from allTagsHTML to rightTagList */
     rightTagList.innerHTML = templates.tagCloudLink(allTagsData);
   }
 } 
@@ -264,7 +260,7 @@ function addClickListenersToTags(){
 addClickListenersToTags();
 
 function generateAuthors(){ 
-  /* [NEW] create a new variable allAuthors with an empty object */
+  /* create a new variable allAuthors with an empty object */
   let allAuthors = {};
 	
   /* find all articles */
@@ -287,7 +283,7 @@ function generateAuthors(){
     /* add generated code to html variable */
     postAuthorWrapper.insertAdjacentHTML('beforeend', linkHTML);
 
-    /* [NEW] check if this author is NOT already in allAuthors */
+    /* check if this author is NOT already in allAuthors */
     if(!allAuthors[articleAuthor]) {
       /* [NEW] add generated code to allTags array */
       allAuthors[articleAuthor] = 1;
@@ -297,26 +293,26 @@ function generateAuthors(){
     /* END LOOP: for every article: */
   }
 
-  /* [NEW] find list of authors in right column */
+  /* find list of authors in right column */
   const rightAuthorsList = document.querySelector(optAuthorsListSelector);
   const cloudParams = calculateCloudParams(allAuthors);
 
-  /* [NEW] create variable from all links to HTML code */
+  /* create variable from all links to HTML code */
   const allAuthorsData = {authors: []};
 
 
-  /* [NEW] START LOOP: for each author in allAuthors : */
+  /* START LOOP: for each author in allAuthors : */
   for(let author in allAuthors){	
     const cloudClassName = calculateCloudClass(allAuthors[author] , cloudParams);
-    /* [NEW] generate code of a link and add it to allAuthorsHTML */
+    /* generate code of a link and add it to allAuthorsHTML */
     allAuthorsData.authors.push({
       author: author,
       count: allAuthors[author],
       className: cloudClassName
     });		
-    /* [NEW] START LOOP: for each author in allAuthors : */
+    /* START LOOP: for each author in allAuthors : */
   }
-  /* [NEW] add html from allAuthors to rightAuthorsList */
+  /* add html from allAuthors to rightAuthorsList */
   rightAuthorsList.innerHTML = templates.authorCloudLink(allAuthorsData);
 }
 generateAuthors();
