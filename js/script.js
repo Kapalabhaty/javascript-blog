@@ -42,6 +42,10 @@ const optTitleSelector = '.post-title';
 const optTitleListSelector = '.titles';
 const optArticleTagsSelector = '.post-tags .list';
 const optArticleAuthorSelector = '.post-author';
+const optTagsListSelector = '.tags.list';
+const optCloudClassCount = 5;
+const optCloudClassPrefix = 'cloud-size-';
+const optAuthorsListSelector ='.list.authors';
 
 function generateTitleLinks(customSelector = ''){
 
@@ -86,7 +90,34 @@ function generateTitleLinks(customSelector = ''){
 
 generateTitleLinks();
 
+function calculateCloudParams(tags){
+  const params = {min:99999 , max:0};
+
+  for(let tag in tags){
+    console.log(tag + ' is used ' + tags[tag] + ' times');
+
+    if(tags[tag] > params.max){
+      params.max = tags[tag];
+    }
+
+    if(tags[tag] < params.min){
+      params.min = tags[tag];
+    }
+  }
+  return params;
+}
+
+function calculateCloudClass(count, params) {
+  const normalizedCount = count - params.min;
+  const normalizedMax = params.max - params.min;
+  const percentage = normalizedCount / normalizedMax;
+  return optCloudClassPrefix + Math.floor( percentage * (optCloudClassCount - 1) + 1 );
+}
+
 function generateTags(){
+  /* [NEW] create a new variable allTags with an empty object */
+  let allTags = {};   
+
   /* find all articles */
   const articles = document.querySelectorAll(optArticleSelector);
   
@@ -117,6 +148,15 @@ function generateTags(){
   
       /* add generated code to html variable */
       html = html + linkHTML;
+			
+      /* [NEW] check if this link is NOT already in allTags */
+      if(!allTags[tag]) {
+
+        /* [NEW] add generated code to allTags array */
+        allTags[tag] = 1;
+      } else {
+        allTags[tag]++;
+      }
     }
     /* END LOOP: for each tag */
        
@@ -124,6 +164,28 @@ function generateTags(){
     tagList.innerHTML = html;
   
     /* END LOOP: for every article: */
+
+    /* [NEW] find list of tags in right column */
+    const rightTagList = document.querySelector(optTagsListSelector);
+
+    const cloudParams = calculateCloudParams(allTags);
+    console.log('TAGS PARAMS:', cloudParams);
+
+    /* [NEW] create variable from all links to HTML code */
+    let allTagsHTML = '';
+
+    /* [NEW] START LOOP: for each tag in allTags : */
+    for(let tag in allTags){
+		
+      const cloudClassName = calculateCloudClass(allTags[tag] , cloudParams);
+
+      /* [NEW] generate code of a link and add it to allTagsHTML */
+      allTagsHTML += '<li><a href="#tag-' + tag + '" class="tag ' + cloudClassName + '">'+ tag +'</a></li>' ;
+
+      /* [NEW] START LOOP: for each tag in allTags : */
+    }
+    /* [NEW] add html from allTagsHTML to rightTagList */
+    rightTagList.innerHTML = allTagsHTML;
   }
 } 
 generateTags();
@@ -190,6 +252,9 @@ function addClickListenersToTags(){
 addClickListenersToTags();
 
 function generateAuthors(){ 
+  /* [NEW] create a new variable allAuthors with an empty object */
+  let allAuthors = {};
+	
   /* find all articles */
   const articles = document.querySelectorAll(optArticleSelector);
   
@@ -209,9 +274,33 @@ function generateAuthors(){
   
     /* add generated code to html variable */
     postAuthorWrapper.insertAdjacentHTML('beforeend', linkHTML);
-       
+
+    /* [NEW] check if this author is NOT already in allAuthors */
+    if(!allAuthors[articleAuthor]) {
+      /* [NEW] add generated code to allTags array */
+      allAuthors[articleAuthor] = 1;
+    } else {
+      allAuthors[articleAuthor]++;
+    }       
     /* END LOOP: for every article: */
   }
+
+  /* [NEW] find list of authors in right column */
+  const rightAuthorsList = document.querySelector(optAuthorsListSelector);
+  const cloudParams = calculateCloudParams(allAuthors);
+
+  /* [NEW] create variable from all links to HTML code */
+  let allAuthorsHTML = '';
+
+  /* [NEW] START LOOP: for each author in allAuthors : */
+  for(let author in allAuthors){	
+    const cloudClassName = calculateCloudClass(allAuthors[author] , cloudParams);
+    /* [NEW] generate code of a link and add it to allAuthorsHTML */		
+    allAuthorsHTML += '<li><a class="author-name" href="#'+ author +'"><span class="'+ cloudClassName +'">'+ author +' (' + allAuthors[author]  + ')</span></a></li>' ;
+    /* [NEW] START LOOP: for each author in allAuthors : */
+  }
+  /* [NEW] add html from allAuthors to rightAuthorsList */
+  rightAuthorsList.innerHTML = allAuthorsHTML;
 }
 generateAuthors();
 
@@ -249,3 +338,5 @@ function addClickListenersToAuthors(){
 }
 
 addClickListenersToAuthors();
+
+
