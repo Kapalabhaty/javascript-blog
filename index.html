@@ -15,7 +15,7 @@
 				<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet"> -->
 		</head>
 		<body>
-				<div class="blog">
+					<div class="blog">
 						<div class="container">
 							<h1 class="logo">my blog</h1>
 							<main class="wrapper">
@@ -238,6 +238,26 @@
 							</main>
 						</div>
 				</div>
+				<script id="template-article-link" type="text/x-handlebars-template">
+					<li><a href="#{{ id }}"><span>{{ title }}</span></a></li>
+				</script>
+				<script id="template-article-tag" type="text/x-handlebars-template">
+					<li><a class="tag" href="#tag-{{ tag }}">{{tag}}</a></li> 
+				</script>
+				<script id="template-article-author" type="text/x-handlebars-template">
+					<a class="author-name" href="#{{articleAuthor}}">{{articleAuthor}}</a>
+				</script>
+				<script id="template-tag-cloud-link" type="text/x-handlebars-template">
+					{{#each tags}}
+					<li><a href="#tag-{{tag}}" class="tag {{className}}">{{tag}}({{count}})</a></li>
+					{{/each}}
+				</script>
+				<script id="template-author-cloud-link" type="text/x-handlebars-template">
+					{{#each authors}}
+					<li><a class="author-name" href="#{{author}}"><span class="{{className}}">{{author}} ({{count}})</span></a></li>
+					{{/each}}
+				</script>
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
 				<script src="js/script.js"></script>
 		</body>
 </html>
